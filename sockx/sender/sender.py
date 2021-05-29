@@ -1,4 +1,3 @@
-from sockapp.sender.udp_message_sender import UDPMessageSender
 from ..constants import *
 from ..utils import error
 from .tcp_file_sender import TCPFileSender
