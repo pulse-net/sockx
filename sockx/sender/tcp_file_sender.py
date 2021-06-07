@@ -10,14 +10,13 @@ from ..utils.error import ConnectionFailure
 
 
 class TCPFileSender:
-    def __init__(self, filename, host, port=PORT):
-        self.__filename = filename
+    def __init__(self, host, port=PORT):
         self.__host = host
         self.__port = port
 
-    def send_file(self):
+    def send_file(self, filename):
         # Get the file size
-        filesize = os.path.getsize(self.__filename)
+        filesize = os.path.getsize(filename)
 
         # Create the client TCP socket
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
@@ -36,17 +35,17 @@ class TCPFileSender:
         print("[+] Connected.")
 
         # Send the filename and filesize
-        s.send(f"{self.__filename}{SEPARATOR}{filesize}".encode())
+        s.send(f"{filename}{SEPARATOR}{filesize}".encode())
 
         # Start sending the file
         progress = tqdm.tqdm(
             range(filesize),
-            f"Sending {self.__filename}",
+            f"Sending {filename}",
             unit="B",
             unit_scale=True,
             unit_divisor=1024,
         )
-        with open(self.__filename, "rb") as f:
+        with open(filename, "rb") as f:
             while True:
                 # Read the bytes from the file
                 bytes_read = f.read(BUFFER_SIZE)
