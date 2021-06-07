@@ -9,14 +9,13 @@ from ..constants import *
 
 
 class UDPFileSender:
-    def __init__(self, filename, host, port=PORT):
-        self.__filename = filename
+    def __init__(self, host, port=PORT):
         self.__host = host
         self.__port = port
 
-    def send_file(self):
+    def send_file(self, filename):
         # Get the file size
-        filesize = os.path.getsize(self.__filename)
+        filesize = os.path.getsize(filename)
 
         # Create the client UDP socket
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -25,17 +24,17 @@ class UDPFileSender:
         addr = (self.__host, self.__port)
 
         # Send the filename and filesize
-        s.sendto(f"{self.__filename}{SEPARATOR}{filesize}".encode(), addr)
+        s.sendto(f"{filename}{SEPARATOR}{filesize}".encode(), addr)
 
         # Start sending the file
         progress = tqdm.tqdm(
             range(filesize),
-            f"Sending {self.__filename}",
+            f"Sending {filename}",
             unit="B",
             unit_scale=True,
             unit_divisor=1024,
         )
-        with open(self.__filename, "rb") as f:
+        with open(filename, "rb") as f:
             while True:
                 # Read the bytes from the file
                 bytes_read = f.read(BUFFER_SIZE)

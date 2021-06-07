@@ -8,12 +8,11 @@ from ..utils.error import ConnectionFailure
 
 
 class TCPMessageSender:
-    def __init__(self, message, host, port=PORT):
-        self.__message = message
+    def __init__(self, host, port=PORT):
         self.__host = host
         self.__port = port
 
-    def send_message(self):
+    def send_message(self, message):
         # Create the client TCP socket
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 
@@ -31,7 +30,7 @@ class TCPMessageSender:
         print("[+] Connected.")
 
         # Send the message
-        s.send(self.__message.encode())
+        s.send(message.encode())
 
         # Close the socket
         s.close()
