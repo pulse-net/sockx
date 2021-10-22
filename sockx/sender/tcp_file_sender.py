@@ -10,8 +10,8 @@ from ..utils.error import ConnectionFailure
 
 
 class TCPFileSender:
-    def __init__(self, host, port=PORT):
-        self.__host = host
+    def __init__(self, receiver_ip, port=PORT):
+        self.__receiver_ip = receiver_ip
         self.__port = port
 
     def send_file(self, filename):
@@ -21,11 +21,11 @@ class TCPFileSender:
         # Create the client TCP socket
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 
-        print(f"[+] Connecting to {self.__host}:{self.__port}")
+        print(f"[+] Connecting to {self.__receiver_ip}:{self.__port}")
         s.settimeout(MAX_TIMEOUT)
 
         try:
-            s.connect((self.__host, self.__port))
+            s.connect((self.__receiver_ip, self.__port))
         except socket.timeout:
             raise ConnectionFailure("Connection timed out, make sure the receiver is in same network!")
         except ConnectionRefusedError:
